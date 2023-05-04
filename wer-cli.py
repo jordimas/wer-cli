@@ -1,4 +1,5 @@
-import os
+import argparse
+
 import datetime
 from evaluate import load
 import sys
@@ -17,17 +18,18 @@ def calculate_wer(reference_file, prediction_file):
     wer_score = wer_score * 100
     return wer_score
 
-def main()    
+def main():
 
-    parser = argparse.ArgumentParser(
+    args = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
 
-    parser.add_argument("-r", "--reference", help="Reference file")
-    parser.add_argument("-p", "--prediction", help="Predition file")
+    args.add_argument("-r", "--reference", help="Reference file",  required=True)
+    args.add_argument("-p", "--prediction", help="Predition file",  required=True)
+    
+    d = args.parse_args().__dict__
 
-
-    wer = calculate_wer(args.reference, args.prediction)
+    wer_score = calculate_wer(d["reference"], d["prediction"])
     print(f"WER metric: {wer_score}%");
 
 if __name__ == "__main__":
